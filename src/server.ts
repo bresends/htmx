@@ -11,8 +11,20 @@ app.engine('liquid', new Liquid().express());
 app.set('views', './src/views');
 app.set('view engine', 'liquid');
 
+app.use(express.static('public'));
+
 app.get('/', (req, res) => {
-    res.status(200).render('index', { value: 'Hi. Hello' });
+    if (req.headers['hx-boosted'])
+        return res.status(200).render('partials/hero');
+
+    res.status(200).render('index', { value: 'Hi you. Hello' });
+});
+
+app.get('/about', (req, res) => {
+    if (req.headers['hx-boosted'])
+        return res.status(200).render('partials/about');
+
+    res.status(200).render('about');
 });
 
 app.get('/db', async (req, res) => {

@@ -6,7 +6,7 @@ import * as schema from './schema';
 
 const migrationClient = postgres(env.DATABASE_URL, { max: 1 });
 
-export const db = drizzle(migrationClient, { schema });
+const db = drizzle(migrationClient, { schema });
 
 async function main() {
     try {

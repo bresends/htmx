@@ -8,35 +8,35 @@ todos.get('/', (req, res) => {
     if (req.headers['hx-boosted'])
         return res.status(200).render('todos/partials/hero');
 
-    res.status(200).render('todos/index', { value: 'Hi you. Hello' });
+    return res.status(200).render('todos/index', { value: 'Hi you. Hello' });
 });
 
 todos.get('/about', (req, res) => {
     if (req.headers['hx-boosted'])
         return res.status(200).render('todos/partials/about');
 
-    res.status(200).render('todos/about');
+    return res.status(200).render('todos/about');
 });
 
 todos.get('/signin', (req, res) => {
     if (req.headers['hx-boosted'])
         return res.status(200).render('todos/partials/signin');
 
-    res.status(200).render('todos/signin');
+    return res.status(200).render('todos/signin');
 });
 
 todos.post('/signin', async (req, res) => {
     if (req.headers['hx-boosted'])
         return res.status(200).render('todos/partials/signin');
 
-    res.status(200).render('todos/signin');
+    return res.status(200).render('todos/signin');
 });
 
 todos.get('/signup', (req, res) => {
     if (req.headers['hx-boosted'])
         return res.status(200).render('todos/partials/signup');
 
-    res.status(200).render('todos/signup');
+    return res.status(200).render('todos/signup');
 });
 
 todos.post('/signup', async (req, res) => {
@@ -70,7 +70,7 @@ todos.get('/logout', (req, res) => {
 todos.get('/app', async (req, res) => {
     const allUsers = await db.select().from(users);
 
-    res.status(200).render('todos/app/index', {
+    return res.status(200).render('todos/app/index', {
         allUsers,
         email: req.cookies.session,
     });

@@ -2,6 +2,14 @@
   "name": "htmx",
   "module": "src/server.ts",
   "type": "module",
+  "scripts": {
+    "start": "bun run src/server.ts,",
+    "dev": "bun run --watch src/server.ts",
+    "db:push": "drizzle-kit push:pg",
+    "db:generate": "drizzle-kit generate:pg",
+    "db:migrate": "tsx src/database/migrate.ts",
+    "db:studio": "drizzle-kit studio"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/express": "^4.17.21",
@@ -11,17 +19,10 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "scripts": {
-    "start": "bun run src/server.ts,",
-    "dev": "bun run src/server.ts --watch",
-    "db:push": "drizzle-kit push:pg",
-    "db:generate": "drizzle-kit generate:pg",
-    "db:migrate": "tsx src/database/migrate.ts",
-    "db:studio": "drizzle-kit studio"
-  },
   "dependencies": {
     "drizzle-orm": "^0.29.3",
     "express": "^4.18.2",
+    "liquidjs": "^10.10.0",
     "postgres": "^3.4.3",
     "zod": "^3.22.4"
   }

@@ -27,6 +27,20 @@ app.get('/about', (req, res) => {
     res.status(200).render('about');
 });
 
+app.get('/signin', (req, res) => {
+    if (req.headers['hx-boosted'])
+        return res.status(200).render('partials/signin');
+
+    res.status(200).render('signin');
+});
+
+app.get('/signup', (req, res) => {
+    if (req.headers['hx-boosted'])
+        return res.status(200).render('partials/signup');
+
+    res.status(200).render('signup');
+});
+
 app.get('/db', async (req, res) => {
     const totalTodos = await db.select({ value: count(todos.id) }).from(todos);
     res.status(200).send({ totalTodos });

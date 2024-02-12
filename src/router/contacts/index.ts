@@ -29,7 +29,7 @@ contacts.post('/new', async (req, res) => {
         email: z.string().email(),
         name: z
             .string()
-            .min(5, { message: 'Name must be at least 5 characters long' }),
+            .min(3, { message: 'Name must be at least 3 characters long' }),
         password: z
             .string()
             .min(8, { message: 'Password must be at least 8 characters long' }),
@@ -76,19 +76,22 @@ contacts.post('/:contact_id/edit', async (req, res) => {
         email: z.string().email(),
         name: z
             .string()
-            .min(5, { message: 'Name must be at least 5 characters long' }),
+            .min(3, { message: 'Name must be at least 3 characters long' }),
         password: z
             .string()
-            .min(8, { message: 'Password must be at least 8 characters long' }),
+            .min(3, { message: 'Password must be at least 8 characters long' }),
     });
 
     try {
         const { email, name, password } = contactSchema.parse(req.body);
-        await db.update(users).set({
-            name,
-            password,
-            email,
-        });
+        await db
+            .update(users)
+            .set({
+                name,
+                password,
+                email,
+            })
+            .where(eq(users.id, Number(contactId)));
         return res.redirect(301, `/contacts/${contactId}`);
     } catch (error) {
         if (error instanceof z.ZodError) {
@@ -105,7 +108,7 @@ contacts.post('/:contact_id/edit', async (req, res) => {
     }
 });
 
-contacts.get('/:contact_id/delete', async (req, res) => {
+contacts.post('/:contact_id/delete', async (req, res) => {
     const contactId = req.params.contact_id;
     await db.delete(users).where(eq(users.id, Number(contactId)));
     return res.redirect(301, '/contacts');

@@ -43,6 +43,7 @@ todos.post('/signup', async (req, res) => {
     const { email, password } = req.body;
 
     res.cookie('session', email, { maxAge: 60 * 60 * 24 * 30, httpOnly: true });
+
     await db.insert(users).values({
         email,
         password,

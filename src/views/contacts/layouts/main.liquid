@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/css/styles.css" rel="stylesheet">
-    <script src="https://unpkg.com/htmx.org@1.9.2"
-        integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h"
-        crossorigin="anonymous"></script>
+    <script src="/js/htmx.js"></script>
     <title>Contacts</title>
 </head>
-<body class="container mx-auto">
+<body hx-boost="true" class="container mx-auto">
   <h2 class="text-4xl font-extrabold dark:text-white">Contacts</h2>
   {% block content %}My default content{% endblock %}
 </body>

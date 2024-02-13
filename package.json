@@ -5,7 +5,7 @@
   "scripts": {
     "start": "bun run src/server.ts,",
     "dev": "bun run --watch src/server.ts",
-    "tw": "bunx tailwind -i ./src/input.css -o ./public/styles.css --watch",
+    "tw": "bunx tailwind -i ./src/input.css -o ./public/css/styles.css --watch",
     "db:push": "drizzle-kit push:pg",
     "db:generate": "drizzle-kit generate:pg",
     "db:migrate": "tsx src/database/migrate.ts",

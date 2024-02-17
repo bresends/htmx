@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { db } from '@src/database/db';
 import { users } from '@src/database/schema';
-import { eq, ilike } from 'drizzle-orm';
+import { asc, eq, ilike } from 'drizzle-orm';
 import { z } from 'zod';
 import { PostgresError } from 'postgres';
 
@@ -10,15 +10,21 @@ export const contacts = Router();
 contacts.get('/', async (req, res) => {
     const query = req.query.q;
     const searchValue = query || '';
+    const page = req.query.page || 1;
 
     const filteredUsers = await db
         .select()
         .from(users)
-        .where(ilike(users.name, `%${searchValue}%`));
+        .orderBy(asc(users.name), asc(users.id))
+        .where(ilike(users.name, `%${searchValue}%`))
+        .limit(10)
+        .offset((Number(page) - 1) * 10);
 
-    return res
-        .status(200)
-        .render('contacts/app/index', { contacts: filteredUsers, searchValue });
+    return res.status(200).render('contacts/app/index', {
+        contacts: filteredUsers,
+        searchValue,
+        page,
+    });
 });
 
 contacts.get('/new', (req, res) => {

@@ -25,6 +25,11 @@
         <td class="px-6 py-4">{{ contact.email }}</td>
         <td>
           <a href="/contacts/{{ contact.id }}/edit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+          <a
+            href="#"
+            hx-delete="/contacts/{{ contact.id }}"
+            hx-confirm="Are you sure you want to delete this contact?"
+            hx-target="body">Delete</a>
         </td>
         <td>
           <a href="/contacts/{{ contact.id }}">View</a>

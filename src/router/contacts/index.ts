@@ -20,7 +20,12 @@ contacts.get('/', async (req, res) => {
         .limit(10)
         .offset((Number(page) - 1) * 10);
 
-    return res.status(200).render('contacts/app/index', {
+    if (req.headers['hx-trigger'] == 'search')
+        return res.status(200).render('contacts/partials/contacts_table', {
+            contacts: filteredUsers,
+        });
+
+    return res.status(200).render('contacts/pages/index', {
         contacts: filteredUsers,
         searchValue,
         page,
@@ -28,7 +33,7 @@ contacts.get('/', async (req, res) => {
 });
 
 contacts.get('/new', (req, res) => {
-    return res.status(200).render('contacts/new');
+    return res.status(200).render('contacts/pages/new');
 });
 
 contacts.post('/new', async (req, res) => {
@@ -53,13 +58,13 @@ contacts.post('/new', async (req, res) => {
     } catch (error) {
         if (error instanceof z.ZodError) {
             if (error instanceof z.ZodError) {
-                res.status(200).render('contacts/new', {
+                res.status(200).render('contacts/pages/new', {
                     errors: error.errors,
                     formData: req.body,
                 });
             }
         } else if ((error as PostgresError).code === '23505') {
-            res.status(200).render('contacts/new', {
+            res.status(200).render('contacts/pages/new', {
                 errors: [{ message: 'Email already exists' }],
                 formData: req.body,
             });
@@ -78,7 +83,7 @@ contacts.get('/:contact_id/edit', async (req, res) => {
         .from(users)
         .where(eq(users.id, Number(contactId)));
 
-    return res.status(200).render('contacts/edit', { contact: user[0] });
+    return res.status(200).render('contacts/pages/edit', { contact: user[0] });
 });
 
 contacts.post('/:contact_id/edit', async (req, res) => {
@@ -162,5 +167,5 @@ contacts.get('/:contact_id', async (req, res) => {
 
     return res
         .status(200)
-        .render('contacts/contact_details', { contact: user[0] });
+        .render('contacts/pages/contact_details', { contact: user[0] });
 });

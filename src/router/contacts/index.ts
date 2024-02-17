@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { db } from '@src/database/db';
 import { users } from '@src/database/schema';
-import { asc, eq, ilike } from 'drizzle-orm';
+import { asc, count, eq, ilike } from 'drizzle-orm';
 import { z } from 'zod';
 import { PostgresError } from 'postgres';
 
@@ -30,6 +30,11 @@ contacts.get('/', async (req, res) => {
         searchValue,
         page,
     });
+});
+
+contacts.get('/count', async (req, res) => {
+    const totalContacts = await db.select({ value: count() }).from(users);
+    return res.status(200).send(`(${totalContacts[0].value} total contacts)`);
 });
 
 contacts.get('/new', (req, res) => {

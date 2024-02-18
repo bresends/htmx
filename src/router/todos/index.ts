@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { db } from '@src/database/db';
-import { users } from '@src/database/schema';
+import { user } from '@src/database/schema';
 
 export const todos = Router();
 
@@ -44,7 +44,7 @@ todos.post('/signup', async (req, res) => {
 
     res.cookie('session', email, { maxAge: 60 * 60 * 24 * 30, httpOnly: true });
 
-    await db.insert(users).values({
+    await db.insert(user).values({
         email,
         password,
     });
@@ -69,7 +69,7 @@ todos.get('/logout', (req, res) => {
 });
 
 todos.get('/app', async (req, res) => {
-    const allUsers = await db.select().from(users);
+    const allUsers = await db.select().from(user);
 
     return res.status(200).render('todos/app/index', {
         allUsers,

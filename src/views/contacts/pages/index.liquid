@@ -43,8 +43,18 @@
 
 
   <div class="relative overflow-x-auto p-4">
-    {% render 'contacts/partials/contacts_table.liquid'
-      , contacts: contacts %}
+    <form>
+
+      {% render 'contacts/partials/contacts_table.liquid'
+        , contacts: contacts %}
+      <button
+        hx-delete="/contacts"
+        hx-confirm="Are you sure you want to delete these contacts?"
+        hx-target="body"
+        class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+        Delete Selected Contacts
+      </button>
+    </form>
   </div>
 
   <div class="flex justify-center w-[20vw] mx-auto gap-2">

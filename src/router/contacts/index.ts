@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { db } from '@src/database/db';
 import { users } from '@src/database/schema';
-import { asc, count, eq, ilike } from 'drizzle-orm';
+import { asc, count, eq, ilike, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { PostgresError } from 'postgres';
 
@@ -24,6 +24,38 @@ contacts.get('/', async (req, res) => {
         return res.status(200).render('contacts/partials/contacts_table', {
             contacts: filteredUsers,
         });
+
+    return res.status(200).render('contacts/pages/index', {
+        contacts: filteredUsers,
+        searchValue,
+        page,
+    });
+});
+
+contacts.delete('/', async (req, res) => {
+    const query = req.query.q;
+    const searchValue = query || '';
+    const page = req.query.page || 1;
+
+    const contactIdsSchema = z
+        .array(z.string())
+        .safeParse(req.body.selected_contact_ids);
+
+    if (!contactIdsSchema.success) {
+        return res.status(200).send('Invalid contact ids');
+    }
+
+    const ids = contactIdsSchema.data.map((id) => Number(id));
+
+    await db.delete(users).where(inArray(users.id, ids));
+
+    const filteredUsers = await db
+        .select()
+        .from(users)
+        .orderBy(asc(users.name), asc(users.id))
+        .where(ilike(users.name, `%${searchValue}%`))
+        .limit(10)
+        .offset((Number(page) - 1) * 10);
 
     return res.status(200).render('contacts/pages/index', {
         contacts: filteredUsers,

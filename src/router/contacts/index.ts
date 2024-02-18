@@ -1,9 +1,9 @@
-import { Router } from 'express';
 import { db } from '@src/database/db';
 import { contact } from '@src/database/schema';
-import { asc, count, eq, ilike, inArray } from 'drizzle-orm';
-import { z } from 'zod';
+import { asc, ilike } from 'drizzle-orm';
+import { Router } from 'express';
 import { PostgresError } from 'postgres';
+import { z } from 'zod';
 
 export const contactsRouter = Router();
 
@@ -69,7 +69,7 @@ contactsRouter.get('/', async (req, res) => {
 //     return res.status(200).send(`(${totalContacts[0].value} total contacts)`);
 // });
 
-contactsRouter.get('/new', (req, res) => {
+contactsRouter.get('/new', async (req, res) => {
     return res.status(200).render('contacts/pages/new');
 });
 
@@ -82,21 +82,20 @@ contactsRouter.post('/new', async (req, res) => {
         blood_type: z.string(),
         phone_number: z.string(),
         rg: z.number(),
-        unitId: z.number(),
-        rankId: z.number(),
-        divisionId: z.number(),
+        unit: z.string().min(1),
+        rank: z.string().min(1),
+        division: z.string().min(1),
     });
     try {
-        // Validate request body against the schema
         const {
             blood_type,
-            divisionId,
             email,
             name,
             phone_number,
             rg,
-            unitId,
-            rankId,
+            division,
+            unit,
+            rank,
         } = contactSchema.parse(req.body);
 
         await db.insert(contact).values({
@@ -105,9 +104,9 @@ contactsRouter.post('/new', async (req, res) => {
             email,
             phone_number,
             rg,
-            unitId,
-            divisionId,
-            rankId,
+            unit,
+            division,
+            rank,
         });
         return res.redirect(301, '/contacts');
     } catch (error) {

@@ -27,15 +27,10 @@ export const contact = pgTable('contacts', {
     name: varchar('name', { length: 256 }).notNull(),
     email: varchar('email', { length: 100 }).notNull().unique(),
     phone_number: varchar('phone', { length: 20 }).notNull(),
-    unitId: integer('unit_id').references(() => unit.id, {
-        onDelete: 'no action',
-    }),
-    divisionId: integer('division_id').references(() => division.id, {
-        onDelete: 'no action',
-    }),
-    rankId: integer('rank_id').references(() => rank.id, {
-        onDelete: 'no action',
-    }),
+    rank: varchar('rank', { length: 50 }).notNull(),
+    unit: varchar('unit', { length: 100 }).notNull(),
+    division: varchar('division', { length: 100 }).notNull(),
+
     userId: integer('user_id').references(() => user.id, {
         onDelete: 'no action',
     }),
@@ -46,45 +41,6 @@ export const contactsRelations = relations(contact, ({ one }) => ({
         fields: [contact.userId],
         references: [user.id],
     }),
-    unit: one(unit, {
-        fields: [contact.unitId],
-        references: [unit.id],
-    }),
-    division: one(division, {
-        fields: [contact.divisionId],
-        references: [division.id],
-    }),
-    rank: one(rank, {
-        fields: [contact.rg],
-        references: [rank.id],
-    }),
-}));
-
-export const rank = pgTable('ranks', {
-    id: serial('id').primaryKey(),
-    name: varchar('name', { length: 50 }).notNull(),
-});
-
-export const ranksRelations = relations(rank, ({ many }) => ({
-    contacts: many(contact),
-}));
-
-export const unit = pgTable('units', {
-    id: serial('id').primaryKey(),
-    name: varchar('name', { length: 100 }).notNull(),
-});
-
-export const unitsRelations = relations(unit, ({ many }) => ({
-    contacts: many(contact),
-}));
-
-export const division = pgTable('divisions', {
-    id: serial('id').primaryKey(),
-    name: varchar('name', { length: 100 }).notNull(),
-});
-
-export const divisionsRelations = relations(division, ({ many }) => ({
-    contacts: many(contact),
 }));
 
 export const todo = pgTable('todos', {

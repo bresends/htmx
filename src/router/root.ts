@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { todos } from './todos';
 import { contactsRouter } from './contacts';
 
-export const root = Router();
+export const rootRouter = Router();
 
-root.use('/todos', todos);
-root.use('/contacts', contactsRouter);
+rootRouter.use('/todos', todos);
+rootRouter.use('/contacts', contactsRouter);

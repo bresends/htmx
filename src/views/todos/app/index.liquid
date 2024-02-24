@@ -1,6 +1,7 @@
 {% layout "todos/layouts/app.liquid" %}
 
 {% block content %}
+<h1>Users</h1>
 <ul>
   {% for user in allUsers %}
     <li>{{ user.email }}</li>

@@ -1,16 +1,13 @@
-import { Router } from 'express';
+import { authController } from '@src/controllers/todos/authController';
 import { db } from '@src/database/db';
 import { user } from '@src/database/schema';
-import { authController } from '@src/controllers/todos/authController';
+import { verifyJWT } from '@src/middleware/verifySession';
+import { Router } from 'express';
+import jsonwebtoken from 'jsonwebtoken';
+
+const { verify } = jsonwebtoken;
 
 export const todos = Router();
-
-todos.get('/', (req, res) => {
-    if (req.headers['hx-boosted'])
-        return res.status(200).render('todos/partials/hero');
-
-    return res.status(200).render('todos/index', { value: 'Hi you. Hello' });
-});
 
 todos.get('/about', (req, res) => {
     if (req.headers['hx-boosted'])
@@ -19,13 +16,20 @@ todos.get('/about', (req, res) => {
     return res.status(200).render('todos/about');
 });
 
-todos.get('/app', async (req, res) => {
+todos.get('/app', verifyJWT, async (req, res) => {
     const allUsers = await db.select().from(user);
 
     return res.status(200).render('todos/app/index', {
         allUsers,
-        email: req.cookies.session,
+        id: res.locals.userId,
     });
+});
+
+todos.get('/', (req, res) => {
+    if (req.headers['hx-boosted'])
+        return res.status(200).render('todos/partials/hero');
+
+    return res.status(200).render('todos/index', { value: 'Hi you. Hello' });
 });
 
 todos.use(authController);

@@ -7,6 +7,8 @@ const { verify } = jsonwebtoken;
 export const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
     const sessionJWT = req.cookies.session;
 
+    if (!sessionJWT) return res.redirect(301, '/todos/signin');
+
     const payload = verify(sessionJWT, env.JWT_SECRET) as {
         userId: number;
     };

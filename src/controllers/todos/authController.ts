@@ -46,7 +46,6 @@ authController.post('/signin', async (req, res) => {
         return res.status(200).send('Invalid credentials');
 
     const foundUser = await db.select().from(user).where(eq(user.email, email));
-
     const validPassword = await bcrypt.compare(password, foundUser[0].password);
 
     if (foundUser.length === 0 || !validPassword)
@@ -58,15 +57,7 @@ authController.post('/signin', async (req, res) => {
 
     res.cookie('session', token, { maxAge: 60 * 60 * 24 * 30, httpOnly: true });
 
-    if (req.headers['hx-boosted']) {
-        res.header('hx-redirect', '/todos/app');
-        return res.sendStatus(201);
-    }
-
-    if (req.headers['hx-boosted'])
-        return res.status(200).render('todos/partials/signin');
-
-    return res.status(200).render('todos/signin');
+    return res.redirect(301, '/todos/app');
 });
 
 authController.post('/signup', async (req, res) => {

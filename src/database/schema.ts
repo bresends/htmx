@@ -16,6 +16,7 @@ export const user = pgTable('users', {
     id: serial('id').primaryKey(),
     email: varchar('email', { length: 100 }).notNull().unique(),
     password: varchar('password', { length: 256 }).notNull(),
+    createdAt: timestamp('created_at').defaultNow(),
 });
 
 export const usersRelations = relations(user, ({ many }) => ({
@@ -46,7 +47,7 @@ export const contactsRelations = relations(contact, ({ one }) => ({
 
 export const todo = pgTable('todos', {
     id: serial('id').primaryKey(),
-    todo: varchar('todo').notNull(),
+    title: varchar('title').notNull(),
     content: text('content'),
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow(),

@@ -1,10 +1,23 @@
 {% layout "todos/layouts/app.liquid" %}
 
 {% block content %}
-<h1>Users</h1>
-<ul>
-  {% for user in allUsers %}
-    <li>{{ user.email }}</li>
-  {% endfor %}
-</ul>
-{% endblock %}
+
+  <div class="container mx-auto">
+
+    <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Todos</h2>
+
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mx-auto">
+      {% render 'todos/partials/todos/todos-table.liquid'
+        , todos: todos %}
+    </div>
+
+
+    <section class="bg-white dark:bg-gray-900">
+      <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Add a new todo</h2>
+        {% render 'todos/partials/todos/new-todo-form.liquid' %}
+      </div>
+    </section>
+
+  {% endblock %}
+</div>
